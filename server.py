@@ -7,10 +7,10 @@ server.bind(("localhost", 8000))
 server.listen(2)
 
 # having sample addresses for the server
-server_ip = "92.10.10.10"
-server_mac = "00:00:0A:BB:28:FC"
+server_ip = "0x3C"
+server_mac = "S1"
 
-router_mac = "05:10:0A:CB:24:EF"
+router_mac = "R1"
 
 while True:
     routerConnection, address = server.accept()
@@ -23,8 +23,8 @@ while True:
     IP_header = ""
     
     message = input("\nEnter the text message to send: ")
-    destination_ip = input("Enter the IP of the clients to send the message to:\n1. 92.10.10.15\n2. 92.10.10.20\n3. 92.10.10.25\n")
-    if(destination_ip == "92.10.10.15" or destination_ip == "92.10.10.20" or destination_ip == "92.10.10.25"):
+    destination_ip = input("Enter the IP of the clients to send the message to:\n1. 0x1A\n2. 0x2A\n3. 0x2B\n")
+    if(destination_ip == "0x1A" or destination_ip == "0x2A" or destination_ip == "0x2B"):
         source_ip = server_ip
         IP_header = IP_header + source_ip + destination_ip
         
