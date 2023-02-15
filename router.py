@@ -33,7 +33,7 @@ client1_ip = "0x1A"
 client1_mac = "N1"
 client2_ip = "0x2A"
 client2_mac = "N2"
-client3_ip = "0x3A"
+client3_ip = "0x2B"
 client3_mac = "N3"
 
 
