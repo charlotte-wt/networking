@@ -17,10 +17,14 @@ while True:
     destination_mac = received_message[2:4]
     source_ip = received_message[4:8]
     destination_ip =  received_message[8:12]
-    message = received_message[12:]
+    protocol = received_message[12:13]
+    data_len = received_message[13:17]
+    message = received_message[17:]
     print("\nPacket integrity:\ndestination MAC address matches client 1 MAC address: {mac}".format(mac=(client1_mac == destination_mac)))
     print("\ndestination IP address matches client 1 IP address: {mac}".format(mac=(client1_ip == destination_ip)))
-    print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+    print("\nThe packed received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
     print("\nSource IP address: {source_ip}, Destination IP address: {destination_ip}".format(source_ip=source_ip, destination_ip=destination_ip))
+    print("\nProtocol: {protocol}".format(protocol=protocol))
+    print("\nDataLength: " + data_len)
     print("\nMessage: " + message)
     print("***************************************************************")

@@ -1,5 +1,3 @@
-# Assuming the server resides in the network 92.10.10.0/24
-
 import socket
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -24,6 +22,7 @@ while True:
     
     message = input("\nEnter the text message to send: ")
     destination_ip = input("Enter the IP of the clients to send the message to:\n1. 0x1A\n2. 0x2A\n3. 0x2B\n")
+    protocol = input("\nPlease enter the protocol of the packet (in an integer):\n0: ping protocol\n1: log protocol\n2: kill protocol\n")
     if(destination_ip == "0x1A" or destination_ip == "0x2A" or destination_ip == "0x2B"):
         source_ip = server_ip
         IP_header = IP_header + source_ip + destination_ip
@@ -32,7 +31,7 @@ while True:
         destination_mac = router_mac 
         ethernet_header = ethernet_header + source_mac + destination_mac
         
-        packet = ethernet_header + IP_header + message
+        packet = ethernet_header + IP_header + protocol + "0x{:02x}".format(len(message)) + message
         
         routerConnection.send(bytes(packet, "utf-8"))  
     else:

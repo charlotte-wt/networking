@@ -76,15 +76,20 @@ while True:
     destination_mac = received_message[2:4]
     source_ip = received_message[4:8]
     destination_ip =  received_message[8:12]
-    message = received_message[12:]
-    print("\n****************************************************************************")
-    print("The packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+    protocol = received_message[12:13]
+    data_len = received_message[13:17]
+    message = received_message[17:]
+
+    print("\nThe packet received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
     print("\nSource IP address: {source_ip}, Destination IP address: {destination_ip}".format(source_ip=source_ip, destination_ip=destination_ip))
+    print("\nProtocol: {protocol}".format(protocol=protocol))
+    print("\nDataLength: " + data_len)
     print("\nMessage: " + message)
+    print("***************************************************************")
     
     ethernet_header = router_mac + arp_table_mac[destination_ip]
     IP_header = source_ip + destination_ip
-    packet = ethernet_header + IP_header + message
+    packet = ethernet_header + IP_header + protocol + data_len + message
     
     destination_socket = arp_table_socket[destination_ip]
     
