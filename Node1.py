@@ -1,30 +1,38 @@
 import socket
-import time 
-client1_ip = "0x1A"
-client1_mac = "N1"
 
-router = ("localhost", 8200)
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(("localhost", 8000))
+server.listen(2)
 
-client1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# having sample addresses for the server
+server_ip = "0x1A"
+server_mac = "N1"
 
-time.sleep(1)
-client1.connect(router)
+router_mac = "R1"
 
 while True:
-    received_message = client1.recv(1024)
-    received_message = received_message.decode("utf-8")
-    source_mac = received_message[0:2]
-    destination_mac = received_message[2:4]
-    source_ip = received_message[4:8]
-    destination_ip =  received_message[8:12]
-    protocol = received_message[12:13]
-    data_len = received_message[13:17]
-    message = received_message[17:]
-    print("\nPacket integrity:\ndestination MAC address matches client 1 MAC address: {mac}".format(mac=(client1_mac == destination_mac)))
-    print("\ndestination IP address matches client 1 IP address: {mac}".format(mac=(client1_ip == destination_ip)))
-    print("\nThe packed received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
-    print("\nSource IP address: {source_ip}, Destination IP address: {destination_ip}".format(source_ip=source_ip, destination_ip=destination_ip))
-    print("\nProtocol: {protocol}".format(protocol=protocol))
-    print("\nDataLength: " + data_len)
-    print("\nMessage: " + message)
-    print("***************************************************************")
+    routerConnection, address = server.accept()
+    if(routerConnection != None):
+        print(routerConnection)
+        break
+
+while True:
+    ethernet_header = ""
+    IP_header = ""
+    
+    message = input("\nEnter the text message to send: ")
+    destination_ip = input("Enter the IP of the clients to send the message to:\n1. 0x2A\n2. 0x2B\n")
+    protocol = input("\nPlease enter the protocol of the packet (in an integer):\n0: ping protocol\n1: log protocol\n2: kill protocol\n")
+    if(destination_ip == "0x2A" or destination_ip == "0x2B"):
+        source_ip = server_ip
+        IP_header = IP_header + source_ip + destination_ip
+        
+        # source_mac = server_mac
+        # destination_mac = router_mac 
+        # ethernet_header = ethernet_header + source_mac + destination_mac
+        
+        packet = IP_header + protocol + "0x{:02x}".format(len(message)) + message
+        
+        routerConnection.send(bytes(packet, "utf-8"))  
+    else:
+        print("Wrong client IP inputted")

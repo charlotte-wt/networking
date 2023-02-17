@@ -29,36 +29,33 @@ server = ("localhost", 8000)
 
 
 
-client1_ip = "0x1A"
-client1_mac = "N1"
-client2_ip = "0x2A"
-client2_mac = "N2"
-client3_ip = "0x2B"
-client3_mac = "N3"
+
+node2_ip = "0x2A"
+node2_mac = "N2"
+node3_ip = "0x2B"
+node3_mac = "N3"
 
 
 # accept the client connections
 router_send.listen(4)
 
-client1 = None
-client2 = None
-client3 = None
-while (client1 == None or client2 == None or client3 == None):
+node2 = None
+node3 = None
+
+while (node2 == None or node3 == None):
     client, address = router_send.accept()
     
-    if(client1 == None):
-        client1 = client
+    if(node2 == None):
+        node2 = client
         print("Node 1 is online")
     
-    elif(client2 == None):
-        client2 = client
+    elif(node3 == None):
+        node3 = client
         print("Node 2 is online")
-    else:
-        client3 = client
-        print("Node 3 is online")
 
-arp_table_socket = {client1_ip : client1, client2_ip : client2, client3_ip : client3}
-arp_table_mac = {client1_ip : client1_mac, client2_ip : client2_mac, client3_ip : client3_mac}
+
+arp_table_socket = {node2_ip : node2, node3_ip : node3}
+arp_table_mac = {node2_ip : node2_mac, node3_ip : node3_mac}
 
 #####################################################################
 
@@ -72,24 +69,24 @@ while True:
     received_message =  received_message.decode("utf-8")
     
     # several parts of the message being dissected
-    source_mac = received_message[0:2]
-    destination_mac = received_message[2:4]
-    source_ip = received_message[4:8]
-    destination_ip =  received_message[8:12]
-    protocol = received_message[12:13]
-    data_len = received_message[13:17]
-    message = received_message[17:]
+    # source_mac = received_message[0:2]
+    # destination_mac = received_message[2:4]
+    source_ip = received_message[0:4]
+    destination_ip =  received_message[4:8]
+    protocol = received_message[8:9]
+    data_len = received_message[9:13]
+    message = received_message[13:]
 
-    print("\nThe packet received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
-    print("\nSource IP address: {source_ip}, Destination IP address: {destination_ip}".format(source_ip=source_ip, destination_ip=destination_ip))
+    # print("\nThe packet received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+    print("\nThe packet received:\nSource IP address: {source_ip}\nDestination IP address: {destination_ip}".format(source_ip=source_ip, destination_ip=destination_ip))
     print("\nProtocol: {protocol}".format(protocol=protocol))
     print("\nDataLength: " + data_len)
     print("\nMessage: " + message)
     print("***************************************************************")
     
-    ethernet_header = router_mac + arp_table_mac[destination_ip]
+    # ethernet_header = router_mac + arp_table_mac[destination_ip]
     IP_header = source_ip + destination_ip
-    packet = ethernet_header + IP_header + protocol + data_len + message
+    packet = IP_header + protocol + data_len + message
     
     destination_socket = arp_table_socket[destination_ip]
     
