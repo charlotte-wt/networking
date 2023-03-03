@@ -3,30 +3,24 @@
 import socket
 import threading
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)      # For UDP
+sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)      # For UDP
 
-udp_host = "localhost"        # Host IP
-udp_port = 12345              # specified port to connect
-source_ip = "0x1A"
-
-# print type(sock) ============> 'type' can be used to see type
-# of any variable ('sock' here)
+udp_host = "localhost"		# Host IP
+udp_port = 12347			        # specified port to connect
+source_ip = "0x2B"
 
 sock.bind((udp_host, udp_port))
 
-
 def send_message():
-    
     while True:
         try:
             message = input("\nEnter the text message to send: ")
-            destination_ip = input("Enter the IP of the clients to send the message to:\n1. 0x2A\n2. 0x2B\n")
+            destination_ip = input("Enter the IP of the clients to send the message to:\n1. 0x1A\n2. 0x2A\n")
             protocol = input("\nPlease enter the protocol of the packet (in an integer):\n0: ping protocol\n1: log protocol\n2: kill protocol\n")
-            
             ethernet_header = ""
             IP_header = ""
-
-            if(destination_ip == "0x2A" or destination_ip == "0x2B"):
+            
+            if(destination_ip == "0x1A" or destination_ip == "0x2A"):
                     
                     IP_header = IP_header + source_ip + destination_ip
                     
@@ -36,29 +30,31 @@ def send_message():
                     
                     packet = IP_header + protocol + "0x{:02x}".format(len(message)) + message
                     
-            
+                
             else:
                 print("Wrong client IP inputted")
             print("UDP target IP:", udp_host)
-            print("UDP target Port:", 12346)
+            print("UDP target Port:", 12345)
 
-            if(destination_ip == "0x2A"):
+            if(destination_ip == "0x1A"):
+                # Sending message to UDP server
+                sock.sendto(packet.encode(), (udp_host, 12345))
+            elif(destination_ip == "0x2A"):
                 # Sending message to UDP server
                 sock.sendto(packet.encode(), (udp_host, 12346))
-            elif(destination_ip == "0x2B"):
-                # Sending message to UDP server
-                sock.sendto(packet.encode(), (udp_host, 12347))
 
         except(KeyboardInterrupt, EOFError):
             print('\n[INFO]: Keyboard Interrupt Received')
             exit()
 
 def wait_client():
+    
     while True:
         try:
             print("Waiting for client...")
             data, addr = sock.recvfrom(1024)  # receive data from client
             print("Received Messages:", data.decode(), " from", addr)
+
             received_message = data.decode();
 
             source_ip = received_message[0:4]
@@ -73,15 +69,13 @@ def wait_client():
             print("\nMessage: " + message)
             print("***************************************************************")
 
-
-
+            
         except(KeyboardInterrupt, EOFError):
             print('\n[INFO]: Keyboard Interrupt Received')
             exit()
-    
+        
 if __name__ == "__main__":
     x = threading.Thread(target=wait_client)
     y = threading.Thread(target=send_message)
     x.start()
     y.start()
-    
