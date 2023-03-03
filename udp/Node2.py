@@ -1,8 +1,8 @@
 import socket
 import struct
 
-source_ip = "0x2B"
-destination_ip = "0x2A"
+source_ip = "0x2A"
+destination_ip = "0x2B"
 router_ip = "0x21"
 
 arp_table = {
@@ -16,15 +16,11 @@ arp_table = {
 # Create a UDP socket
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # Bind the socket to a specific IP address and port number
-client_socket.bind(('127.0.0.1', 3234))
+client_socket.bind(('127.0.0.1', 2234))
 
 while True:
-    # Receive a message from the router
-    response, _ = client_socket.recvfrom(1024)
-    print(f"Client 2: {response.decode()[7:]}")
-
     # Send a message to the router
-    message = input("Client 3: ")
+    message = input("Node 2: ")
     message_len = len(message)
 
     ip_packet = bytes.fromhex(source_ip[2:]) + bytes.fromhex(destination_ip[2:]) + struct.pack('B', int(message_len)) + message.encode()
@@ -35,3 +31,7 @@ while True:
     ethernet_frame = bytes.fromhex(source_mac.encode('ascii').hex()) + bytes.fromhex(destination_mac.encode('ascii').hex()) + ip_packet
 
     client_socket.sendto(ethernet_frame, ('127.0.0.1', 1234))
+
+    # Receive a message from the router
+    response, _= client_socket.recvfrom(1024)
+    print(f"Node 3: {response.decode()[7:]}")

@@ -17,14 +17,14 @@ router_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 router_socket.bind(('127.0.0.1', 1234))
 
 while True:
-    # Receive a message from either client 1 or client 2
+    # Receive a message from either node 1 or node 2
     ethernet_frame_recv, address = router_socket.recvfrom(1024)
     decoded_ethernet_frame_recv = ethernet_frame_recv.decode('ascii')
     print(f"Received message from {address}: {decoded_ethernet_frame_recv}")
 
-    # Forward the message to the other client
+    # Forward the message to the other node
     if address[1] == 2234:
-        # Message came from client 2, forward to client 3
+        # Message came from Node 2, forward to No 3
         destination_ip = "0x2B"
         new_source_mac = arp_table.get(router2_ip)
         new_destination_mac = arp_table.get(destination_ip)
@@ -32,7 +32,7 @@ while True:
 
         router_socket.sendto(new_ethernet_frame, ('127.0.0.1', 3234))
     elif address[1] == 3234:
-        # Message came from client 3, forward to client 2
+        # Message came from node 3, forward to node 2
         destination_ip = "0x2A"
         new_source_mac = arp_table.get(router2_ip)
         new_destination_mac = arp_table.get(destination_ip)
