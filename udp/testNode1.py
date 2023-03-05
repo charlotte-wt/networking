@@ -39,16 +39,14 @@ def send_message():
             
             else:
                 print("Wrong client IP inputted")
+                
             print("UDP target IP:", udp_host)
             print("UDP target Port:", 12346)
 
-            if(destination_ip == "0x2A"):
+            if(destination_ip == "0x2A" or destination_ip == "0x2B"):
                 # Sending message to UDP server
-                sock.sendto(packet.encode(), (udp_host, 12346))
-            elif(destination_ip == "0x2B"):
-                # Sending message to UDP server
-                sock.sendto(packet.encode(), (udp_host, 12347))
-
+                sock.sendto(packet.encode(), (udp_host, 12348))
+         
         except(KeyboardInterrupt, EOFError):
             print('\n[INFO]: Keyboard Interrupt Received')
             exit()

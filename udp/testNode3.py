@@ -36,12 +36,9 @@ def send_message():
             print("UDP target IP:", udp_host)
             print("UDP target Port:", 12345)
 
-            if(destination_ip == "0x1A"):
+            if(destination_ip == "0x1A" or destination_ip == "0x2A"):
                 # Sending message to UDP server
-                sock.sendto(packet.encode(), (udp_host, 12345))
-            elif(destination_ip == "0x2A"):
-                # Sending message to UDP server
-                sock.sendto(packet.encode(), (udp_host, 12346))
+                sock.sendto(packet.encode(), (udp_host, 12349))
 
         except(KeyboardInterrupt, EOFError):
             print('\n[INFO]: Keyboard Interrupt Received')
@@ -55,7 +52,7 @@ def wait_client():
             data, addr = sock.recvfrom(1024)  # receive data from client
             print("Received Messages:", data.decode(), " from", addr)
 
-            received_message = data.decode();
+            received_message = data.decode()
 
             source_ip = received_message[0:4]
             destination_ip =  received_message[4:8]
