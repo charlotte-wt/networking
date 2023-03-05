@@ -53,7 +53,7 @@ def wait_client():
             data, addr = sock.recvfrom(1024)  # receive data from client
             print("Received Messages:", data.decode(), " from", addr)
 
-            received_message = data.decode();
+            received_message = data.decode()
 
             source_ip = received_message[0:4]
             destination_ip =  received_message[4:8]
