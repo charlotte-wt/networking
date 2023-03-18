@@ -41,21 +41,21 @@ Run (sequence of commands is not important since this is UDP):
     - 0: ping
         - The recipient replies the sender with the same data
         - Example:
-            - ![Ping Details](./images/ping_eg.png)
+    ![Ping Details](./images/ping_eg.png)
 
     - 1: log
         - The recipient writes the received data to a log file
         - We log the datetime and the IP packet details.
         - Example:
-            - ![Log Details](./images/log_details.png)
+    ![Log Details](./images/log_details.png)
     - 2: kill
         - The recipient exits & terminates its application (i.e. stops running)
         - Example:
             1. Node1 and Node3 are initially running
-                - ![Kill Detail 1](./images/kill_1.png)
+            ![Kill Detail 1](./images/kill_1.png)
             2. Node1 sends Node3 an IP packet with the kill protocol
             3. Node3 is terminated
-                - ![Kill Detail 2](./images/kill_2.png)
+            ![Kill Detail 2](./images/kill_2.png)
 
     - 3: indicator (reply from ping)
         - simply indicates that this packet is a reply from a ping sent out 
