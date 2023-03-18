@@ -1,5 +1,6 @@
 import socket
 import threading
+import os
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)      # For UDP
 
@@ -60,8 +61,8 @@ def wait_client():
                 sock.sendto(packet.encode(), (udp_host, 12348))
 
         except(KeyboardInterrupt, EOFError):
-            print('\n[INFO]: Keyboard Interrupt Received')
-            exit()
+            print('\n[INFO]: Terminating..')
+            os._exit(1)
     
 if __name__ == "__main__":
     x = threading.Thread(target=wait_client)

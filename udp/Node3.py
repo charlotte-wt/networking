@@ -44,8 +44,8 @@ def send_message():
 
             
         except(KeyboardInterrupt, EOFError):
-            print('\n[INFO]: Keyboard Interrupt Received')
-            exit()
+            print('\n[INFO]: Terminating..')
+            os._exit(1)
 
 def wait_client():
     
