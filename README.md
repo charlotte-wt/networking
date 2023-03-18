@@ -31,11 +31,12 @@ Run (sequence of commands is not important since this is UDP):
 #### Implementation
 
 1. Each Interface is binded to a port in localhost and has its own individual socket:
-    - Node1: 12345
-    - Node2: 12346
-    - Node3: 12347
-    - RouterR1: 12348
-    - RouterR2: 12349
+    - Port Numbers:
+        - Node1: 12345
+        - Node2: 12346
+        - Node3: 12347
+        - RouterR1: 12348
+        - RouterR2: 12349
 
 2. Protocol:
     - 0: ping
