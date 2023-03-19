@@ -11,6 +11,7 @@
     - [Implementation](#implementation)
     - [Protocol](#2-protocol)
     - [IP Spoofing](#3-ip-spoofing)
+    - [Sniffing Attack](#4-sniffing-attack)
 
  
 ## About
@@ -29,7 +30,8 @@ The IP packets sent is in the following format:
 ## Getting Started
 
 ### Pre-requisites
-1. - [Python](https://www.python.org/downloads/) (version 3)
+1. - [Python](https://www.python.org/downloads/) (version 3.10 recommended)
+2. - [Scapy](https://scapy.readthedocs.io/en/latest/installation.html) (version 2.5.0 recommended)
 
 ### Usage
 
@@ -95,3 +97,13 @@ However, communication between Nodes requires the Router interfaces to be runnin
 - command: `python3 Node3.py --spoof`
     - send a message to Node 1 with protocol 1 (ping) to see results
     - Node 2 will receive a ping reply even though it did not send out any ping packets
+
+
+#### 4. Sniffing Attack
+- `sniffer.py` runs using [Scapy](https://scapy.readthedocs.io/en/latest/installation.html)
+    - run `python3 sniffer.py`
+    - sniffs on Node2
+    - future implementation: allow Node1 to sniff on Node2
+
+        ![Sniffer](./images/sniffer.png)
+
