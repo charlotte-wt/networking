@@ -1,5 +1,18 @@
 ﻿# Network Emulation
 
+## Table of contents
+
+- [Network Emulation](#network-emulation)
+  - [Table of contents](#table-of-contents)
+  - [About](#about)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#pre-requisites)
+    - [Usage](#usage)
+    - [Implementation](#implementation)
+    - [Protocol](#2-protocol)
+    - [IP Spoofing](#3-ip-spoofing)
+
+ 
 ## About
 Network Emulation is a project that aims to emulate behaviours in the Ethernet and network layer (IP), as shown in the diagram below.
 
@@ -8,6 +21,9 @@ Network Emulation is a project that aims to emulate behaviours in the Ethernet a
 The IP packets sent is in the following format:
 
 ![IP](./images/IP_datagram.jpg)
+
+
+
 
 
 ## Getting Started
@@ -34,48 +50,48 @@ However, communication between Nodes requires the Router interfaces to be runnin
 
 #### Implementation
 
-1. Each Interface is binded to a port in localhost and has its own individual socket:
-    - Port Numbers:
-        - Node1: `12345`
-        - Node2: `12346`
-        - Node3: `12347`
-        - RouterR1: `12348`
-        - RouterR2: `12349`
+#### 1. Each Interface is binded to a port in localhost and has its own individual socket:
+- Port Numbers:
+    - Node1: `12345`
+    - Node2: `12346`
+    - Node3: `12347`
+    - RouterR1: `12348`
+    - RouterR2: `12349`
 
-    - All IP Packets will go through the Router interfaces
-        - packets will NOT be sent directly from one Node to another
-        - e.g. 
-            - Node 1 > R1 > R2 > Node 3
-            - Node 2 > R2 > Node 3
-            - Node 2 > R2 > R1 > Node 1
+- All IP Packets will go through the Router interfaces
+    - packets will NOT be sent directly from one Node to another
+    - e.g. 
+        - Node 1 > R1 > R2 > Node 3
+        - Node 2 > R2 > Node 3
+        - Node 2 > R2 > R1 > Node 1
 
 
-2. Protocol:
-    - 0: ping
-        - The recipient replies the sender with the same data
-        - Example:
-    ![Ping Details](./images/ping_eg.png)
+#### 2. Protocol:
+- 0: ping
+    - The recipient replies the sender with the same data
+    - Example:
+![Ping Details](./images/ping_eg.png)
 
-    - 1: log
-        - The recipient writes the received data to a log file
-        - We log the datetime and the IP packet details.
-        - Example:  
-            ![Log Details](./images/log_details.png)
+- 1: log
+    - The recipient writes the received data to a log file
+    - We log the datetime and the IP packet details.
+    - Example:  
+        ![Log Details](./images/log_details.png)
 
-    - 2: kill
-        - The recipient exits & terminates its application (i.e. stops running)
-        - Example:
-            1. Node1 and Node3 are initially running
-                ![Kill Detail 1](./images/kill_1.png)
-            2. Node1 sends Node3 an IP packet with the kill protocol
-            3. Node3 is terminated
-                ![Kill Detail 2](./images/kill_2.png)
+- 2: kill
+    - The recipient exits & terminates its application (i.e. stops running)
+    - Example:
+        1. Node1 and Node3 are initially running
+            ![Kill Detail 1](./images/kill_1.png)
+        2. Node1 sends Node3 an IP packet with the kill protocol
+        3. Node3 is terminated
+            ![Kill Detail 2](./images/kill_2.png)
 
-    - 3: indicator (reply from ping)
-        - simply indicates that this packet is a reply from a ping sent out 
+- 3: indicator (reply from ping)
+    - simply indicates that this packet is a reply from a ping sent out 
 
-3. IP Spoofing:
-    - Node 3 is able to spoof Node 2's IP and send IP packets to Node 1
-    - command: `python3 Node3.py --spoof`
-        - send a message to Node 1 with protocol 1 (ping) to see results
-        - Node 2 will receive a ping reply even though it did not send out any ping packets
+#### 3. IP Spoofing:
+- Node 3 is able to spoof Node 2's IP and send IP packets to Node 1
+- command: `python3 Node3.py --spoof`
+    - send a message to Node 1 with protocol 1 (ping) to see results
+    - Node 2 will receive a ping reply even though it did not send out any ping packets
