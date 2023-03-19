@@ -18,25 +18,37 @@ The IP packets sent is in the following format:
 ### Usage
 
 #### UDP Folder
+From root folder:
+1. `cd udp` / open udp folder
+2. Repeat step 1 for 5 terminals.
 
-Run (sequence of commands is not important since this is UDP):
-```
-1. python3 routerR1.py
-2. python3 routerR2.py
-3. python3 Node1.py
-4. python3 Node2.py
-5. python3 Node3.py
-```
+
+Run one command in each terminal (sequence of commands is not important since this is UDP):
+1. `python3 routerR1.py`
+2. `python3 routerR2.py`
+3. `python3 Node1.py`
+4. `python3 Node2.py`
+5. `python3 Node3.py`
+
+However, communication between Nodes requires the Router interfaces to be running.
 
 #### Implementation
 
 1. Each Interface is binded to a port in localhost and has its own individual socket:
     - Port Numbers:
-        - Node1: 12345
-        - Node2: 12346
-        - Node3: 12347
-        - RouterR1: 12348
-        - RouterR2: 12349
+        - Node1: `12345`
+        - Node2: `12346`
+        - Node3: `12347`
+        - RouterR1: `12348`
+        - RouterR2: `12349`
+
+    - All IP Packets will go through the Router interfaces
+        - packets will NOT be sent directly from one Node to another
+        - e.g. 
+            - Node 1 > R1 > R2 > Node 3
+            - Node 2 > R2 > Node 3
+            - Node 2 > R2 > R1 > Node 1
+
 
 2. Protocol:
     - 0: ping
@@ -61,3 +73,9 @@ Run (sequence of commands is not important since this is UDP):
 
     - 3: indicator (reply from ping)
         - simply indicates that this packet is a reply from a ping sent out 
+
+3. IP Spoofing:
+    - Node 3 is able to spoof Node 2's IP and send IP packets to Node 1
+    - command: `python3 Node3.py --spoof`
+        - send a message to Node 1 with protocol 1 (ping) to see results
+        - Node 2 will receive a ping reply even though it did not send out any ping packets

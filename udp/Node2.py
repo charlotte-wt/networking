@@ -91,7 +91,7 @@ def wait_client():
               
             elif(protocol_num == 1):
                 # log
-                logging.basicConfig(filename="node2.log", 
+                logging.basicConfig(filename="logs/node2.log", 
                 format='%(asctime)s \n %(message)s', 
                 filemode='w') 
 

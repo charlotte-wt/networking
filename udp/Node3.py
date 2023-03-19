@@ -5,11 +5,25 @@ import threading
 import logging
 import os
 
+import argparse
+
+# Set up the command line arguments
+parser = argparse.ArgumentParser()
+parser.add_argument('-s','--spoof', action="store_true")
+
+# Parse the command line arguments
+args = parser.parse_args()
+
 sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)      # For UDP
 
 udp_host = "localhost"		# Host IP
-udp_port = 12347			        # specified port to connect
-source_ip = "0x2B"
+udp_port = 12347		    # specify port to connect
+source_ip = ""
+
+if (args.spoof):
+    source_ip = "0x2A"
+else:
+    source_ip = "0x2B"
 
 sock.bind((udp_host, udp_port))
 
@@ -91,7 +105,7 @@ def wait_client():
               
             elif(protocol_num == 1):
                 # log
-                logging.basicConfig(filename="node3.log", 
+                logging.basicConfig(filename="logs/node3.log", 
                 format='%(asctime)s \n %(message)s', 
                 filemode='w') 
 
