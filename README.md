@@ -15,7 +15,7 @@
 
  
 ## About
-Network Emulation is a project that aims to emulate behaviours in the Ethernet and network layer (IP), as shown in the diagram below.
+Network Emulation is a console app that aims to emulate behaviours in the Ethernet and network layer (IP), as shown in the diagram below.
 
 ![Diagram](./images/diagram.jpg)
 
