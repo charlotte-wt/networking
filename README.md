@@ -39,6 +39,19 @@ The IP packets sent is in the following format:
         - logging
         - os
 2. - [Scapy](https://scapy.readthedocs.io/en/latest/installation.html) (version 2.5.0 recommended)
+    - for sniffing:
+      - find out your loopback interface name.
+      - Use the `show_interfaces()` command and `network_name()` commands
+```
+>>> show_interfaces()
+INFO: Table cropped to fit the terminal (conf.auto_crop_tables==True)
+Source   Index  Name                                      MAC                IPv4             IPv6
+libpcap  1      Software Loopback Interface 1             00:00:00:00:00:00  127.0.0.1        ::1    
+
+
+ >>> network_name('Software Loopback Interface 1')
+'\\Device\\NPF_Loopback'
+```
 
 ### Usage
 
