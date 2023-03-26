@@ -1,6 +1,7 @@
 import struct
 import socket
 import select
+from tabulate import tabulate
 
 router1_ip = "0x11"
 router2_ip = "0x21"
@@ -95,6 +96,15 @@ def send_ethernet_frame(ethernet_type, source_mac, destination_mac, source_ip, d
     print(ethernet_frame)
     socket_name.sendto(ethernet_frame, ('127.0.0.1', port))
 
+def show_arp_table():
+    columns = ['Internet Address', 'Physical Address']
+    arp_cache_R1_list = list(arp_cache_R1.items())
+    arp_cache_R2_list = list(arp_cache_R2.items())
+    print("=== ARP table ===")
+    print('Interface: ', router1_ip)
+    print(tabulate(arp_cache_R1_list, headers=columns))
+    print('Interface: ', router2_ip)
+    print(tabulate(arp_cache_R2_list, headers=columns))
 
 while True:
     # List of sockets to listen for incoming data
@@ -232,7 +242,8 @@ while True:
 
                     source_mac_recv = dest_mac_recv
                     dest_mac_recv = arp_cache_R1.get(source_ip_recv)
-                    print(arp_cache_R1)
+                    show_arp_table()
+
                     arp_reply_sent(ether_type, op_code_recv, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, sock, 12345)
 
             if (bytes.fromhex("0x0800"[2:]) in data):
