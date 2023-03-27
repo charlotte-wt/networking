@@ -11,46 +11,19 @@ source_mac = "N2"
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 client_socket.bind(('127.0.0.1', 12346))
 
-def arp_request_recv(ethernet_type, op_code, source_mac, destination_mac, source_ip, destination_ip):
-    arp_request = bytes.fromhex(ethernet_type[2:]) + op_code.encode() + source_mac.encode() + destination_mac.encode() + bytes.fromhex(source_ip[2:]) + bytes.fromhex(destination_ip[2:])
+def arp_request_reply(ethernet_type, op_code, source_mac, destination_mac, source_ip, destination_ip, req_reply, recv_send, socket_name = None, port = None):
     print("***************************************************************")
-    print("Address Resolution Protocol (request) received")
+    print("Address Resolution Protocol ({}) {}".format(req_reply, recv_send))
     print("Source MAC address:", source_mac)            # e.g: N1
     print("Destination MAC address:", destination_mac)  # e.g: R1
     print("Source IP address:", source_ip)              # e.g: 0x1A
     print("Destination IP address:", destination_ip)    # e.g: 0x2B
     print("=== Makes routing decision ===")
     print("***************************************************************")
-    # print(arp_request)
 
-def arp_request_sent(ethernet_type, op_code, source_mac, destination_mac, source_ip, destination_ip, socket_name, port):
-    print("***************************************************************")
-    print("Address Resolution Protocol (request) sent")
-    print("Source MAC address:", source_mac)            # e.g: N1
-    print("Destination MAC address:", destination_mac)  # e.g: R1
-    print("Source IP address:", source_ip)              # e.g: 0x1A
-    print("Destination IP address:", destination_ip)    # e.g: 0x2B
-    print("=== Makes routing decision ===")
-    print("***************************************************************")
-    arp_request = bytes.fromhex(ethernet_type[2:]) + op_code.encode() + source_mac.encode() + destination_mac.encode() + bytes.fromhex(source_ip[2:]) + bytes.fromhex(destination_ip[2:])
-    # print(arp_request)
-    socket_name.sendto(arp_request, ('127.0.0.1', port))
-
-def arp_reply_recv():
-    print("A")
-
-def arp_reply_sent(ethernet_type, op_code, source_mac, destination_mac, source_ip, destination_ip, socket_name, port):
-    print("***************************************************************")
-    print("Address Resolution Protocol (reply) sent")
-    print("Source MAC address:", source_mac)            # e.g: N1
-    print("Destination MAC address:", destination_mac)  # e.g: R1
-    print("Source IP address:", source_ip)              # e.g: 0x1A
-    print("Destination IP address:", destination_ip)    # e.g: 0x2B
-    print("=== Makes routing decision ===")
-    print("***************************************************************")
-    arp_reply = bytes.fromhex(ethernet_type[2:]) + op_code.encode() + source_mac.encode() + destination_mac.encode() + bytes.fromhex(source_ip[2:]) + bytes.fromhex(destination_ip[2:])
-    # print(arp_reply)
-    socket_name.sendto(arp_reply, ('127.0.0.1', port))
+    if (recv_send == "sent"):
+        arp_request_reply = bytes.fromhex(ethernet_type[2:]) + op_code.encode() + source_mac.encode() + destination_mac.encode() + bytes.fromhex(source_ip[2:]) + bytes.fromhex(destination_ip[2:])
+        socket_name.sendto(arp_request_reply, ('127.0.0.1', port))
 
 def recv_ethernet_frame(source_mac, destination_mac, source_ip, destination_ip):
     print("***************************************************************")
@@ -78,12 +51,12 @@ while True:
         source_mac_recv = decoded_arp_request_recv[3:5]
         source_ip_recv = '0x{:02X}'.format(ord(decoded_arp_request_recv[-2]))
         destination_ip_recv = '0x{:02X}'.format(ord(decoded_arp_request_recv[-1]))
-        arp_request_recv(ether_type, op_code_recv, source_mac_recv, "FF:FF:FF:FF:FF:FF", source_ip_recv, destination_ip_recv)
+        arp_request_reply(ether_type, op_code_recv, source_mac_recv, "FF:FF:FF:FF:FF:FF", source_ip_recv, destination_ip_recv, "request", "receive")
 
         # check if its intended recipent
         if (destination_ip_recv == source_ip and op_code_recv == "1"):
             op_code = "2"
-            arp_reply_sent(ether_type, op_code, source_mac, source_mac_recv, source_ip_recv, destination_ip_recv, client_socket, 12349)
+            arp_request_reply(ether_type, op_code, source_mac, source_mac_recv, source_ip_recv, destination_ip_recv, "request", "sent", client_socket, 12349)
             print(destination_ip_recv, "is at", source_mac)
         else:
             print("Drop frame")
