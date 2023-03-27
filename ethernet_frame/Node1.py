@@ -45,6 +45,8 @@ def send_ethernet_frame(ethernet_type, source_mac, destination_mac, source_ip, d
 
 if __name__ == "__main__":
     destination_mac = "R1"
+    message = input("\nEnter the text message to send: ")
+    message_len = len(message)
     destination_ip = input("Enter the IP of the clients to send the message to:\n1. 0x2A\n2. 0x2B\n")
 
     y = threading.Thread(target=arp_request(source_mac, destination_mac, source_ip, destination_ip, 12348))
@@ -66,8 +68,8 @@ if __name__ == "__main__":
                 ether_type = "0x0800"
                 destination_mac = source_mac_recv
 
-                message = input("Enter message: ")
-                message_len = len(message)
+                # message = input("Enter message: ")
+                # message_len = len(message)
                 send_ethernet_frame(ether_type, source_mac, destination_mac, source_ip_recv, destination_ip_recv, message_len, message, client_socket, 12348)
 
         if (bytes.fromhex("0x0800"[2:]) in data):
