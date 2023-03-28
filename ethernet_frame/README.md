@@ -73,14 +73,17 @@ However, communication between Nodes requires the Router interfaces to be runnin
 
 #### Implementation of Ethernet Frames
 - Address Resolution Protocol (ARP) Request-Reply
-![ARP Details](./images/arp_reply_request.png)
+    - Example:  
+        ![ARP Details](./images/arp_reply_request.png)
 
 - Ethernet Broadcast Effect Emulation
-![Broadcast Details](./images/broadcast1.png)
-![Broadcast Details](./images/broadcast2.png)
+    - Example:  
+        ![Broadcast Details](./images/broadcast_1.png)
+        ![Broadcast Details](./images/broadcast_2.png)
 
 - ARP Table
-![ARP Table Details](./images/arp_table.png)
+    - Example:  
+        ![ARP Table Details](./images/arp_table.png)
 
 #### Implementation of IP
 
