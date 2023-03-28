@@ -85,7 +85,6 @@ while True:
         source_ip_recv = '0x{:02X}'.format(ord(decoded_arp_request_recv[-2]))
         destination_ip_recv = '0x{:02X}'.format(ord(decoded_arp_request_recv[-1]))
         from_port = addr[1]
-        # print(from_port)
 
         if (from_port == 12345):
             if (bytes.fromhex("0x0806"[2:]) in data):
@@ -98,7 +97,7 @@ while True:
 
                     source_mac_recv = dest_mac_recv
                     dest_mac_recv = router2_mac
-                    arp_request_reply(ether_type, op_code_recv, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, "request", "sent", sock, 12348)
+                    arp_request_reply(ether_type, op_code_recv, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, "reply", "sent", sock, 12348)
             
             if (bytes.fromhex("0x0800"[2:]) in data):
                 source_mac_recv = decoded_arp_request_recv[2:4]
@@ -125,8 +124,8 @@ while True:
                         source_mac_recv = dest_mac_recv
                         dest_mac_recv = "FF:FF:FF:FF:FF:FF"
                         print("Who has", destination_ip_recv, "?")
-                        arp_request_reply(ether_type, op_code_recv, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, "request", "sent", sock, 12346)
-                        arp_request_reply(ether_type, op_code_recv, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, "request", "sent", sock, 12347)
+                        arp_request_reply(ether_type, op_code_recv, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, "reply", "sent", sock, 12346)
+                        arp_request_reply(ether_type, op_code_recv, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, "reply", "sent", sock, 12347)
             
             if (bytes.fromhex("0x0800"[2:]) in data):
                 source_mac_recv = decoded_arp_request_recv[2:4]
@@ -148,11 +147,14 @@ while True:
                     source_mac_recv = decoded_arp_request_recv[3:5]
                     dest_mac_recv = decoded_arp_request_recv[5:7]
                     arp_request_reply(ether_type, op_code_recv, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, "request", "receive")
-                    arp_cache_R2[destination_ip_recv] = source_mac_recv
 
-                    source_mac_recv = dest_mac_recv
-                    dest_mac_recv = router1_mac                    
-                    arp_request_reply(ether_type, op_code_recv, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, "request", "sent", sock, 12348)
+                    # check if arp_cache_R2 is empty
+                    if (len(arp_cache_R2) == 0):
+                        arp_cache_R2[destination_ip_recv] = source_mac_recv
+
+                        source_mac_recv = dest_mac_recv
+                        dest_mac_recv = router1_mac                    
+                        arp_request_reply(ether_type, op_code_recv, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, "reply", "sent", sock, 12348)
             
             if (bytes.fromhex("0x0800"[2:]) in data):
                 source_mac_recv = decoded_arp_request_recv[2:4]
@@ -174,14 +176,16 @@ while True:
                     source_mac_recv = decoded_arp_request_recv[3:5]
                     dest_mac_recv = decoded_arp_request_recv[5:7]
                     arp_request_reply(ether_type, op_code_recv, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, "request", "receive")
-                    arp_cache_R2[destination_ip_recv] = source_mac_recv
 
-                    source_mac_recv = dest_mac_recv
-                    dest_mac_recv = router1_mac                    
-                    arp_request_reply(ether_type, op_code_recv, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, "request", "sent", sock, 12348)
+                    # check if arp_cache_R2 is empty                  
+                    if (len(arp_cache_R2) == 0):
+                        arp_cache_R2[destination_ip_recv] = source_mac_recv
+
+                        source_mac_recv = dest_mac_recv
+                        dest_mac_recv = router1_mac                    
+                        arp_request_reply(ether_type, op_code_recv, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, "reply", "sent", sock, 12348)
             
             if (bytes.fromhex("0x0800"[2:]) in data):
-                # print(data)
                 source_mac_recv = decoded_arp_request_recv[2:4]
                 dest_mac_recv = decoded_arp_request_recv[4:6]
                 source_ip_recv = '0x{:02X}'.format(ord(decoded_arp_request_recv[6]))
@@ -206,7 +210,7 @@ while True:
                     dest_mac_recv = arp_cache_R1.get(source_ip_recv)
                     show_arp_table()
 
-                    arp_request_reply(ether_type, op_code_recv, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, "request", "sent", sock, 12345)
+                    arp_request_reply(ether_type, op_code_recv, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, "reply", "sent", sock, 12345)
 
             if (bytes.fromhex("0x0800"[2:]) in data):
                 source_mac_recv = decoded_arp_request_recv[2:4]
@@ -220,4 +224,3 @@ while True:
                 dest_mac_recv = arp_cache_R1.get(source_ip_recv)
                 data_payload = data[8:]
                 send_ethernet_frame(ether_type, source_mac_recv, dest_mac_recv, source_ip_recv, destination_ip_recv, data_payload, sock, 12345)
-

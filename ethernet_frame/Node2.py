@@ -1,6 +1,8 @@
 import argparse
 import struct
 import socket
+from time import sleep
+from pytimedinput import timedInput
 
 arp_cache = []
 
@@ -56,10 +58,19 @@ while True:
         # check if its intended recipent
         if (destination_ip_recv == source_ip and op_code_recv == "1"):
             op_code = "2"
-            arp_request_reply(ether_type, op_code, source_mac, source_mac_recv, source_ip_recv, destination_ip_recv, "request", "sent", client_socket, 12349)
             print(destination_ip_recv, "is at", source_mac)
+            sleep(10) # sleep 10 before replying
+            arp_request_reply(ether_type, op_code, source_mac, source_mac_recv, source_ip_recv, destination_ip_recv, "reply", "sent", client_socket, 12349)
         else:
-            print("Drop frame")
+            print("Not intended")
+            userText, timedOut = timedInput("Spoof? (Y/N): ", timeout=6)
+            if(timedOut or userText == "N"):
+                print("Drop frame")
+            else:
+                print("reply to router R2")
+                op_code = "2"
+                print(destination_ip_recv, "is at", source_mac)
+                arp_request_reply(ether_type, op_code, source_mac, source_mac_recv, source_ip_recv, destination_ip_recv, "reply", "sent", client_socket, 12349)
 
     if (bytes.fromhex("0x0800"[2:]) in data):
         print("Received message: ", decoded_arp_request_recv[9:])

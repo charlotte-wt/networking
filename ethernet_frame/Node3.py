@@ -1,6 +1,7 @@
 import argparse
 import struct
 import socket
+from time import sleep
 
 arp_cache = []
 
@@ -53,11 +54,12 @@ while True:
         destination_ip_recv = '0x{:02X}'.format(ord(decoded_arp_request_recv[-1]))
         arp_request_reply(ether_type, op_code_recv, source_mac_recv, "FF:FF:FF:FF:FF:FF", source_ip_recv, destination_ip_recv, "request", "receive")
 
+        sleep(10)
         # check if its intended recipent
         if (destination_ip_recv == source_ip and op_code_recv == "1"):
             op_code = "2"
-            arp_request_reply(ether_type, op_code, source_mac, source_mac_recv, source_ip_recv, destination_ip_recv, "request", "sent", client_socket, 12349)
             print(destination_ip_recv, "is at", source_mac)
+            arp_request_reply(ether_type, op_code, source_mac, source_mac_recv, source_ip_recv, destination_ip_recv, "reply", "sent", client_socket, 12349)
         else:
             print("Drop frame")
             
