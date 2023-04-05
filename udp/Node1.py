@@ -119,14 +119,12 @@ def send_message():
         try:
             sleep(0.2)
             prompt = int(input("\nPlease enter the number of the action you want to perform:\n1. Send Protocol\n2. Configure Firewall \
-                            \n3. IP Spoofing\n4. IP Filter\n5. Packet Sniffer\n6. Traceroute\n7. Exit (Close Socket)\n\nInput: "))
+                            \n3. IP Spoofing\n4. IP Filter\n5. Packet Sniffer\n6. Exit (Close Socket)\n\nInput: "))
             if(prompt == 1):
                 send_protocol()
             elif(prompt == 2): 
                 firewall_config()
             elif(prompt == 6):
-                traceroute()
-            elif(prompt == 7):
                 print('\n[INFO]: Terminating..')
                 sock.close()
                 os._exit(1)
@@ -151,28 +149,6 @@ def error_handler():
     print('\n[INFO]: Terminating..')
     sock.close()
     os._exit(1)
-
-
-def traceroute():
-    address = int(input("\nWhich node would you like to ping?\n1. Node 2\n2. Node 3\n\n"))
-    if address == 1:
-        print(f"traceroute to Node 2 (0x2A), 3 hops max")
-        sleep(0.2)
-        print("\n1 Router1 (0x11)")
-        sleep(0.6)
-        print("2 Router2 (0x21)")
-        sleep(0.4)
-        print("3 Node 2 (0x2A)")
-    elif address == 2:
-        print(f"traceroute to Node 3 (0x2B), 3 hops max")
-        sleep(0.2)
-        print("\n1 Router1 (0x11)")
-        sleep(0.6)
-        print("2 Router2 (0x21)")
-        sleep(0.4)
-        print("3 Node 3 (0x2A)")
-    else:
-        print("Invalid Input!")
 
 if __name__ == "__main__":
     x = threading.Thread(target=receive_message)
