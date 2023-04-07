@@ -80,7 +80,7 @@ def received_protocol(received_packet):
     print(to_print)
     print("***************************************************************")
     print("\nPlease enter the number of the action you want to perform:\n1. Send Protocol\n2. Configure Firewall \
-                            \n3. IP Spoofing\n4. IP Filter\n5. Packet Sniffer\n6. Exit (Close Socket)\n\nInput: ", end="")
+                            \n3. IP Spoofing\n4. IP Filter\n5. Packet Sniffer\n6. Traceroute\n7. Exit (Close Socket)\n\nInput: ", end="")
 
     protocol_num = int(protocol)
     if (protocol_num == 0):
