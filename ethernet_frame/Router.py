@@ -45,6 +45,7 @@ def show_arp_table():
     print("=== ARP table ===")
     print('Interface: ', router1_ip)
     print(tabulate(arp_cache_R1_list, headers=columns))
+    print()
     print('Interface: ', router2_ip)
     print(tabulate(arp_cache_R2_list, headers=columns))
 
