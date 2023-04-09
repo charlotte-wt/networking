@@ -19,13 +19,7 @@ node2_mac = "N2"
 node3_ip = "0x2B"
 node3_mac = "N3"
 
-
 arp_table_mac = {node2_ip : node2_mac, node3_ip : node3_mac}
-
-# def send_message():
-#     return
-    
-
 
 def wait_client():
     while True:

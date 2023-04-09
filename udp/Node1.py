@@ -111,7 +111,6 @@ def received_protocol(received_packet):
         sock.close()
         os._exit(1)
 
-
 # Main Thread functions
 
 def send_message():
