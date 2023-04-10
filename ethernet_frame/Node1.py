@@ -23,16 +23,16 @@ sock.bind((udp_host, 12345))
 def arp_request_reply(ethernet_type, op_code, source_mac, destination_mac, source_ip, destination_ip, protocol, message_info, req_reply, recv_send, socket_name = None, port = None):
     print("***************************************************************")
     print("Address Resolution Protocol ({}) {}".format(req_reply, recv_send))
-    # print("Source MAC address:", source_mac)            # e.g: N1
-    # print("Destination MAC address:", destination_mac)  # e.g: R1
-    # print("Source IP address:", source_ip)              # e.g: 0x1A
-    # print("Destination IP address:", destination_ip)    # e.g: 0x2B
-    # print("=== Makes routing decision ===")
-    # print("***************************************************************")
+    print("Source MAC address:", source_mac)            # e.g: N1
+    print("Destination MAC address:", destination_mac)  # e.g: R1
+    print("Source IP address:", source_ip)              # e.g: 0x1A
+    print("Destination IP address:", destination_ip)    # e.g: 0x2B
+    print("=== Makes routing decision ===")
+    print("***************************************************************")
 
     if (recv_send == "sent"):
         arp_request_reply = bytes.fromhex(ethernet_type[2:]) + op_code.encode() + source_mac.encode() + destination_mac.encode() + bytes.fromhex(source_ip[2:]) + bytes.fromhex(destination_ip[2:]) + protocol.encode() + message_info.encode()
-        # print(arp_request_reply)
+        print("Sending arp request: ", arp_request_reply)
         socket_name.sendto(arp_request_reply, ('127.0.0.1', port))
 
 def send_ethernet_frame(ethernet_type, source_mac, destination_mac, source_ip, destination_ip, protocol, message_info, socket_name, port):
@@ -53,7 +53,6 @@ def firewall_config():
 
 
 def start_console():
-    print('console started')
     try:
         sleep(0.2)
         prompt = int(input("\nPlease enter the number of the action you want to perform:\n1. Send Protocol\n2. Configure Firewall \
@@ -75,8 +74,6 @@ def start_console():
         error_handler()
 
 def send_protocol():
-    print("pinging")
-
     try:
         message = input("\nEnter the text message to send: ")
         data_len = len(message)
@@ -130,7 +127,7 @@ def receive_message():
         # Receive a message from the router
         data, addr = sock.recvfrom(1024)
         decoded_arp_request_recv = data.decode('ascii')
-        print(data)
+        print("Receiving arp reply: ", data)
 
         if (bytes.fromhex("0x0806"[2:]) in data):
             ether_type = "0x0806"
@@ -142,7 +139,7 @@ def receive_message():
             message_info = decoded_arp_request_recv[10:]
 
             if (source_ip_recv == source_ip and op_code_recv == "2"):
-                arp_request_reply(ether_type, op_code_recv, source_mac_recv, source_mac, source_ip_recv, destination_ip_recv, protocol, message_info, "request", "receive")
+                arp_request_reply(ether_type, op_code_recv, source_mac_recv, source_mac, source_ip_recv, destination_ip_recv, protocol, message_info, "reply", "receive")
                 ether_type = "0x0800"
                 destination_mac = source_mac_recv
                 send_ethernet_frame(ether_type, source_mac, destination_mac, source_ip_recv, destination_ip_recv, protocol, message_info, sock, 12348)

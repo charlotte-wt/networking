@@ -19,15 +19,16 @@ sock.bind((udp_host, 12347))
 def arp_request_reply(ethernet_type, op_code, source_mac, destination_mac, source_ip, destination_ip, protocol, message_info, req_reply, recv_send, socket_name = None, port = None):
     print("***************************************************************")
     print("Address Resolution Protocol ({}) {}".format(req_reply, recv_send))
-    # print("Source MAC address:", source_mac)            # e.g: N1
-    # print("Destination MAC address:", destination_mac)  # e.g: R1
-    # print("Source IP address:", source_ip)              # e.g: 0x1A
-    # print("Destination IP address:", destination_ip)    # e.g: 0x2B
-    # print("=== Makes routing decision ===")
-    # print("***************************************************************")
+    print("Source MAC address:", source_mac)            # e.g: N1
+    print("Destination MAC address:", destination_mac)  # e.g: R1
+    print("Source IP address:", source_ip)              # e.g: 0x1A
+    print("Destination IP address:", destination_ip)    # e.g: 0x2B
+    print("=== Makes routing decision ===")
+    print("***************************************************************")
 
     if (recv_send == "sent"):
         arp_request_reply = bytes.fromhex(ethernet_type[2:]) + op_code.encode() + source_mac.encode() + destination_mac.encode() + bytes.fromhex(source_ip[2:]) + bytes.fromhex(destination_ip[2:]) + protocol.encode() + message_info.encode()
+        print(arp_request_reply)
         socket_name.sendto(arp_request_reply, ('127.0.0.1', port))
 
 def send_ethernet_frame(ethernet_type, source_mac, destination_mac, source_ip, destination_ip, protocol, message_info, socket_name, port):
