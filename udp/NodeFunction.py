@@ -141,6 +141,8 @@ class Node_Socket:
                 elif(prompt == 2): 
                     self.firewall_config()
                 elif(prompt == 6):
+                    self.traceroute()
+                elif(prompt == 7):
                     print('\n[INFO]: Terminating..')
                     self.sock.close()
                     os._exit(1)
