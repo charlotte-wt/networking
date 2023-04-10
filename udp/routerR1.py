@@ -61,8 +61,9 @@ def wait_client():
             data, addr = sock.recvfrom(1024)  # receive data from client
             print("Received Messages:", data.decode(), " from", addr)
             data = data.decode()
-            if(data[8:9] in str(protocol_num_array[:3])):
-                received_protocol(data)
+            # if(data[8:9] in str(protocol_num_array[:3])):
+            #     received_protocol(data)
+            received_protocol(data)
            
         except(KeyboardInterrupt, EOFError):
             print('\n[INFO]: Terminating..')

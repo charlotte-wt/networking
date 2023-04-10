@@ -21,16 +21,28 @@ class Node_Socket:
     def send_protocol(self):
         try:
             message = input("\nEnter the text message to send: ")
-            destination_ip = input("Enter the IP of the clients to send the message to:\n1. 0x2A\n2. 0x2B\n")
+            destination_ip = ""
+            if (self.source_ip == "0x1A"):
+                destination_ip = input("Enter the IP of the clients to send the message to:\n1. 0x2A\n2. 0x2B\n")
+            elif(self.source_ip == "0x2A"):
+                destination_ip = input("Enter the IP of the clients to send the message to:\n1. 0x1A\n2. 0x2B\n")
+            elif(self.source_ip == "0x2B"):
+                destination_ip = input("Enter the IP of the clients to send the message to:\n1. 0x1A\n2. 0x2A\n")
             protocol = input("\nPlease enter the protocol of the packet (in an integer):\n0: ping protocol\n1: log protocol\n2: kill protocol\n")
             ethernet_header = ""
             IP_header = ""
 
-            if(destination_ip == "0x2A" or destination_ip == "0x2B"):
+            if(self.source_ip == "0x1A" and (destination_ip == "0x2A" or destination_ip == "0x2B")):
                 IP_header = IP_header + self.source_ip + destination_ip
                 # source_mac = server_mac
                 # destination_mac = router_mac 
                 # ethernet_header = ethernet_header + source_mac + destination_mac
+                packet = IP_header + protocol + "0x{:02x}".format(len(message)) + message
+            elif(self.source_ip == "0x2A" and (destination_ip == "0x1A" or destination_ip == "0x2B")):
+                IP_header = IP_header + self.source_ip + destination_ip
+                packet = IP_header + protocol + "0x{:02x}".format(len(message)) + message
+            elif(self.source_ip == "0x2B" and (destination_ip == "0x1A" or destination_ip == "0x2A")):
+                IP_header = IP_header + self.source_ip + destination_ip
                 packet = IP_header + protocol + "0x{:02x}".format(len(message)) + message
             else:
                 print("Wrong client IP inputted")
@@ -38,9 +50,9 @@ class Node_Socket:
             # print("UDP target IP:", udp_host)
             # print("UDP target Port:", 12346)
 
-            if(destination_ip == "0x2A" or destination_ip == "0x2B"):
-                # Sending message to UDP server
-                self.sock.sendto(packet.encode(), (self.udp_host, self.router_port))
+         
+            # Sending message to UDP server
+            self.sock.sendto(packet.encode(), (self.udp_host, self.router_port))
         
         except(KeyboardInterrupt, EOFError, ValueError):
             self.error_handler()
@@ -54,6 +66,20 @@ class Node_Socket:
             print("Firewall configured successfully!\n")
         except(KeyboardInterrupt, EOFError, ValueError):
             self.error_handler()
+
+
+
+    def ip_spoofing(self):
+        spoof_ip = ""
+        if (self.source_ip == "0x1A"):
+            spoof_ip = input("Enter the IP of the clients to send the message to:\n1. 0x2A\n2. 0x2B\n")
+        elif (self.source_ip== "0x2A"):
+            spoof_ip = input("Enter the IP of the clients to send the message to:\n1. 0x1A\n2. 0x2B\n")
+        elif (self.source_ip == "0x2B"):
+            spoof_ip = input("Enter the IP of the clients to send the message to:\n1. 0x1A\n2. 0x2A\n")
+
+        self.source_ip = spoof_ip
+
 
 
     # Receive message functions
@@ -74,8 +100,8 @@ class Node_Socket:
 
         print(to_print)
         print("***************************************************************")
-        print("\nPlease enter the number of the action you want to perform:\n1. Send Protocol\n2. Configure Firewall \
-                                \n3. IP Spoofing\n4. IP Filter\n5. Packet Sniffer\n6. Exit (Close Socket)\n\nInput: ", end="")
+        print("\nPlease enter the number of the action you want to perform:\n1. Send Protocol\n2. Configure Firewall\
+            \n3. IP Spoofing\n4. IP Filter\n5. Packet Sniffer\n6. TraceRoute\n7. Exit (Close Socket)\n\nInput: ", end="")
 
         protocol_num = int(protocol)
         if (protocol_num == 0):
@@ -83,11 +109,13 @@ class Node_Socket:
             new_destination_ip = source_ip
             new_source_ip = destination_ip
             new_protocol = "3"
-            new_message = received_packet
+            new_message = message
             new_packet = new_source_ip + new_destination_ip + new_protocol + "0x{:02x}".format(len(new_message)) + new_message
 
-            if(new_destination_ip == "0x2A" or new_destination_ip == "0x2B"):
+            if(new_source_ip == "0x2A" or new_source_ip == "0x2B"):
             # Sending message to UDP server
+                self.sock.sendto(new_packet.encode(), (self.udp_host, 12349))
+            elif(new_source_ip == "0x1A"):
                 self.sock.sendto(new_packet.encode(), (self.udp_host, 12348))
 
         elif(protocol_num == 1):
@@ -106,7 +134,7 @@ class Node_Socket:
             self.sock.close()
             os._exit(1)
     
-    def traceroute():
+    def traceroute(self):
         address = int(input("\nWhich node would you like to ping?\n1. Node 2\n2. Node 3\n\n"))
         if address == 1:
             print(f"traceroute to Node 2 (0x2A), 3 hops max")
@@ -134,12 +162,14 @@ class Node_Socket:
         while True:
             try:
                 sleep(0.2)
-                prompt = int(input("\nPlease enter the number of the action you want to perform:\n1. Send Protocol\n2. Configure Firewall \
-                                \n3. IP Spoofing\n4. IP Filter\n5. Packet Sniffer\n6. Exit (Close Socket)\n\nInput: "))
+                prompt = int(input("\nPlease enter the number of the action you want to perform:\n1. Send Protocol\n2. Configure Firewall\
+                    \n3. IP Spoofing\n4. IP Filter\n5. Packet Sniffer\n6. TraceRoute\n7. Exit (Close Socket)\n\nInput: "))
                 if(prompt == 1):
                     self.send_protocol()
                 elif(prompt == 2): 
                     self.firewall_config()
+                elif(prompt == 3):
+                    self.ip_spoofing()
                 elif(prompt == 6):
                     self.traceroute()
                 elif(prompt == 7):
