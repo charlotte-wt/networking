@@ -4,7 +4,7 @@ import socket
 import logging
 import os
 from time import sleep
-from scapy.all import *
+# from scapy.all import *
 
 # import argparse
 
@@ -91,16 +91,17 @@ class Node_Socket:
         elif (self.source_ip == "0x2B"):
             sniff_ip = input("Enter the IP of the clients to send the message to:\n1. 0x1A\n2. 0x2A\n")
 
-        num_packets = input("Enter the number of packets you would like to sniff")
-        try:
-            if (sniff_ip == "0x1A"):
-                sniff(count=num_packets,filter="port 12345", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
-            elif (sniff_ip == "0x2A"):
-                sniff(count=num_packets,filter="port 12346", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
-            elif (sniff_ip == "0x2B"):
-                sniff(count=num_packets,filter="port 12347", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
-        except(KeyboardInterrupt):
-            os._exit(1)
+        num_packets = input("Enter the number of packets you would like to sniff\n")
+        num_packets = int(num_packets)
+        # try:
+        #     if (sniff_ip == "0x1A"):
+        #         sniff(count=num_packets,filter="port 12345", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
+        #     elif (sniff_ip == "0x2A"):
+        #         sniff(count=num_packets,filter="port 12346", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
+        #     elif (sniff_ip == "0x2B"):
+        #         sniff(count=num_packets,filter="port 12347", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
+        # except(KeyboardInterrupt):
+        #     os._exit(1)
         
 
 
