@@ -4,6 +4,7 @@ import socket
 import logging
 import os
 from time import sleep
+# from scapy.all import *
 
 # import argparse
 
@@ -81,6 +82,29 @@ class Node_Socket:
         self.source_ip = spoof_ip
 
 
+    def ip_sniffer(self):
+        sniff_ip = ""
+        if (self.source_ip == "0x1A"):
+            sniff_ip = input("Enter the IP of the clients to send the message to:\n1. 0x2A\n2. 0x2B\n")
+        elif (self.source_ip== "0x2A"):
+            sniff_ip = input("Enter the IP of the clients to send the message to:\n1. 0x1A\n2. 0x2B\n")
+        elif (self.source_ip == "0x2B"):
+            sniff_ip = input("Enter the IP of the clients to send the message to:\n1. 0x1A\n2. 0x2A\n")
+
+        num_packets = input("Enter the number of packets you would like to sniff\n")
+        num_packets = int(num_packets)
+        # try:
+        #     if (sniff_ip == "0x1A"):
+        #         sniff(count=num_packets,filter="port 12345", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
+        #     elif (sniff_ip == "0x2A"):
+        #         sniff(count=num_packets,filter="port 12346", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
+        #     elif (sniff_ip == "0x2B"):
+        #         sniff(count=num_packets,filter="port 12347", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
+        # except(KeyboardInterrupt):
+        #     os._exit(1)
+        
+
+
 
     # Receive message functions
         
@@ -101,7 +125,7 @@ class Node_Socket:
         print(to_print)
         print("***************************************************************")
         print("\nPlease enter the number of the action you want to perform:\n1. Send Protocol\n2. Configure Firewall\
-            \n3. IP Spoofing\n4. IP Filter\n5. Packet Sniffer\n6. TraceRoute\n7. Exit (Close Socket)\n\nInput: ", end="")
+            \n3. IP Spoofing\n4. Packet Sniffer\n5. TraceRoute\n6. Exit (Close Socket)\n\nInput: ", end="")
 
         protocol_num = int(protocol)
         if (protocol_num == 0):
@@ -163,14 +187,16 @@ class Node_Socket:
             try:
                 sleep(0.2)
                 prompt = int(input("\nPlease enter the number of the action you want to perform:\n1. Send Protocol\n2. Configure Firewall\
-                    \n3. IP Spoofing\n4. IP Filter\n5. Packet Sniffer\n6. TraceRoute\n7. Exit (Close Socket)\n\nInput: "))
+                    \n3. IP Spoofing\n4. Packet Sniffer\n5. TraceRoute\n6. Exit (Close Socket)\n\nInput: "))
                 if(prompt == 1):
                     self.send_protocol()
                 elif(prompt == 2): 
                     self.firewall_config()
                 elif(prompt == 3):
-                    self.ip_spoofing()
-                elif(prompt == 6):
+                   self.ip_spoofing()
+                elif(prompt == 4):
+                    self.ip_sniffer()
+                elif(prompt == 5):
                     self.traceroute()
                 elif(prompt == 7):
                     print('\n[INFO]: Terminating..')
