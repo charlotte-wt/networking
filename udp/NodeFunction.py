@@ -144,9 +144,19 @@ class Node_Socket:
 
         elif(protocol_num == 1):
             # log
-            logging.basicConfig(filename="logs/node1.log", 
-            format='%(asctime)s \n %(message)s', 
-            filemode='w')
+            if (destination_ip == "0x1A"):
+                logging.basicConfig(filename="logs/node1.log", 
+                format='%(asctime)s \n %(message)s', 
+                filemode='w')
+            elif(destination_ip == "0x2A"):
+                logging.basicConfig(filename="logs/node2.log", 
+                format='%(asctime)s \n %(message)s', 
+                filemode='w')
+            elif(destination_ip == "0x2B"):
+                logging.basicConfig(filename="logs/node3.log", 
+                format='%(asctime)s \n %(message)s', 
+                filemode='w')
+
             logger=logging.getLogger() 
             logger.setLevel(logging.DEBUG) 
             logger.info(to_print) 
