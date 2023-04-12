@@ -58,8 +58,15 @@ def wait_client():
             print('\n[INFO]: Terminating..')
             os._exit(1)
     
+def exit():
+    input()
+    if(KeyboardInterrupt, EOFError):
+        print('\n[INFO]: Terminating..')
+        sock.close()
+        os._exit(1)
+        
 if __name__ == "__main__":
     x = threading.Thread(target=wait_client)
-    # y = threading.Thread(target=send_message)
+    y = threading.Thread(target=exit)
     x.start()
-    # y.start()
+    y.start()

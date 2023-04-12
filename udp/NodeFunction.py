@@ -4,17 +4,20 @@ import socket
 import logging
 import os
 from time import sleep
-from scapy.all import *
+# from scapy.all import *
 
 # import argparse
 
 class Node_Socket:
-    def __init__(self, udp_host, udp_port, source_ip, router_port):
+    def __init__(self, udp_host, udp_port, source_ip, source_mac, router_port):
         self.udp_host = udp_host
         self.udp_port = udp_port
         self.source_ip = source_ip
+        self.source_mac = source_mac
         self.router_port = router_port
         self.firewall = []
+        self.arp_table = {}
+        self.ip_port_table = {"0x1A": 12345, "0x2A": 12346, "0x2B": 12347, "0x11": 12348, "0x21":12349}
         self.protocol_num_array = [0,1,2,3,4,5,6,7]
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind((udp_host, udp_port))
@@ -32,7 +35,9 @@ class Node_Socket:
             protocol = input("\nPlease enter the protocol of the packet (in an integer):\n0: ping protocol\n1: log protocol\n2: kill protocol\n")
             ethernet_header = ""
             IP_header = ""
-
+            print(self.source_ip[2], destination_ip[2])
+            # if (self.source_ip[2] != destination_ip[2]):
+            #     self.arp_request
             if(self.source_ip == "0x1A" and (destination_ip == "0x2A" or destination_ip == "0x2B")):
                 IP_header = IP_header + self.source_ip + destination_ip
                 # source_mac = server_mac
@@ -93,25 +98,26 @@ class Node_Socket:
 
         num_packets = input("Enter the number of packets you would like to sniff\n")
         num_packets = int(num_packets)
-        try:
-            if (sniff_ip == "0x1A"):
-                sniff(count=num_packets,filter="port 12345", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
-            elif (sniff_ip == "0x2A"):
-                sniff(count=num_packets,filter="port 12346", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
-            elif (sniff_ip == "0x2B"):
-                sniff(count=num_packets,filter="port 12347", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
-        except(KeyboardInterrupt):
-            os._exit(1)
+        # try:
+        #     if (sniff_ip == "0x1A"):
+        #         sniff(count=num_packets,filter="port 12345", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
+        #     elif (sniff_ip == "0x2A"):
+        #         sniff(count=num_packets,filter="port 12346", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
+        #     elif (sniff_ip == "0x2B"):
+        #         sniff(count=num_packets,filter="port 12347", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
+        # except(KeyboardInterrupt):
+        #     os._exit(1)
         
-
-
 
     # Receive message functions
         
     def received_protocol(self, received_packet):
         source_ip = received_packet[0:4]
         if(source_ip in self.firewall):
-            print("Packet from " + source_ip + " blocked by firewall.")
+            print("\n\nPacket from " + source_ip + " blocked by firewall.")
+            print("***************************************************************")
+            print("\nPlease enter the number of the action you want to perform:\n1. Send Protocol\n2. Configure Firewall\
+                \n3. IP Spoofing\n4. Packet Sniffer\n5. TraceRoute\n6. Exit (Close Socket)\n\nInput: ", end="")
             return
 
         destination_ip =  received_packet[4:8]
@@ -237,7 +243,7 @@ class Node_Socket:
     def send_message(self):
         while True:
             try:
-                sleep(0.2)
+                sleep(0.3)
                 prompt = int(input("\nPlease enter the number of the action you want to perform:\n1. Send Protocol\n2. Configure Firewall\
                     \n3. IP Spoofing\n4. Packet Sniffer\n5. TraceRoute\n6. Exit (Close Socket)\n\nInput: "))
                 if(prompt == 1):
@@ -263,13 +269,48 @@ class Node_Socket:
     def receive_message(self):
         while True:
             try:
-                data, addr = self.sock.recvfrom(1024)  # receive data from client
-                print("\n\nReceived Packet:", data.decode(), " from", addr)
+                data, addr = self.sock.recvfrom(1024)
+                # print("\n\nReceived Packet:", data.decode(), " from", addr)
                 received_packet = data.decode()
                 if(received_packet[8:9] in str(self.protocol_num_array[:4])):
                     self.received_protocol(received_packet)
             except(KeyboardInterrupt, EOFError, ValueError):
                 self.error_handler()
+
+    # def arp_reply(self, received_packet):
+    #     ethernet_type = received_packet[0:6]
+    #     sender_mac = received_packet[6:8]
+    #     destination_mac = received_packet[8:10]
+    #     data_length = received_packet[10]
+    #     message  = received_packet[11:]
+    #     target_ip = message[21:25]
+    #     if self.source_ip == target_ip:
+    #         if self.source_ip == "0x1A":
+    #             sender_ip = "0x11"
+    #         else:
+    #             sender_ip = "0x21"
+    #         print("***************************************************************")
+    #         print("Address Resolution Protocol ({}) {}".format("request", "receive"))
+    #         print("Sender MAC address:", sender_mac)            # e.g: N2 or R1
+    #         print("Sender IP address:", sender_ip)  # e.g: 0x1A or 0x11 (router's ip)
+    #         print("Target Mac address:", "FF:FF:FF:FF:FF:FF") # e.g: R1, but since its broadcast arp request, it will be FF              
+    #         print("Target IP address:", target_ip)    # e.g: 0x2B
+    #         print("***************************************************************")
+
+    #         arp_reply = target_ip + " is at " + self.source_mac
+    #         print(arp_reply, "\nSending arp reply...")
+    #         self.sock.sendto(arp_reply.encode(), (self.udp_host, self.router_port))
+    #     else:
+    #         print("Not intended recipient, Dropping ethernet frame...")
+
+        
+    # def arp_request(self):
+    #     print("hi")
+    #     # if (recv_send == "sent"):
+    #     #     arp_request_reply = bytes.fromhex(ethernet_type[2:]) + op_code.encode() + source_mac.encode() + destination_mac.encode() + bytes.fromhex(source_ip[2:]) + bytes.fromhex(destination_ip[2:]) + protocol.encode() + message_info.encode()
+    #     #     print("Sending arp request: ", arp_request_reply)
+    #     #     socket_name.sendto(arp_request_reply, (self.udp_host, self.router_port))
+
 
     def error_handler(self):
         print('\n[INFO]: Terminating..')
