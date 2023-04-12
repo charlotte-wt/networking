@@ -73,11 +73,11 @@ class Node_Socket:
     def ip_spoofing(self):
         spoof_ip = ""
         if (self.source_ip == "0x1A"):
-            spoof_ip = input("Enter the IP of the clients to send the message to:\n1. 0x2A\n2. 0x2B\n")
+            spoof_ip = input("Enter the IP to spoof:\n1. 0x2A\n2. 0x2B\n")
         elif (self.source_ip== "0x2A"):
-            spoof_ip = input("Enter the IP of the clients to send the message to:\n1. 0x1A\n2. 0x2B\n")
+            spoof_ip = input("Enter the IP to spoof:\n1. 0x1A\n2. 0x2B\n")
         elif (self.source_ip == "0x2B"):
-            spoof_ip = input("Enter the IP of the clients to send the message to:\n1. 0x1A\n2. 0x2A\n")
+            spoof_ip = input("Enter the IP to spoof:\n1. 0x1A\n2. 0x2A\n")
 
         self.source_ip = spoof_ip
 
