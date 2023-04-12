@@ -4,7 +4,7 @@ import socket
 import logging
 import os
 from time import sleep
-# from scapy.all import *
+from scapy.all import *
 
 # import argparse
 
@@ -93,15 +93,15 @@ class Node_Socket:
 
         num_packets = input("Enter the number of packets you would like to sniff\n")
         num_packets = int(num_packets)
-        # try:
-        #     if (sniff_ip == "0x1A"):
-        #         sniff(count=num_packets,filter="port 12345", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
-        #     elif (sniff_ip == "0x2A"):
-        #         sniff(count=num_packets,filter="port 12346", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
-        #     elif (sniff_ip == "0x2B"):
-        #         sniff(count=num_packets,filter="port 12347", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
-        # except(KeyboardInterrupt):
-        #     os._exit(1)
+        try:
+            if (sniff_ip == "0x1A"):
+                sniff(count=num_packets,filter="port 12345", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
+            elif (sniff_ip == "0x2A"):
+                sniff(count=num_packets,filter="port 12346", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
+            elif (sniff_ip == "0x2B"):
+                sniff(count=num_packets,filter="port 12347", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
+        except(KeyboardInterrupt):
+            os._exit(1)
         
 
 
@@ -224,7 +224,7 @@ class Node_Socket:
                 data, addr = self.sock.recvfrom(1024)  # receive data from client
                 print("\n\nReceived Packet:", data.decode(), " from", addr)
                 received_packet = data.decode()
-                if(received_packet[8:9] in str(self.protocol_num_array[:3])):
+                if(received_packet[8:9] in str(self.protocol_num_array[:4])):
                     self.received_protocol(received_packet)
             except(KeyboardInterrupt, EOFError, ValueError):
                 self.error_handler()
