@@ -4,7 +4,7 @@ import socket
 import logging
 import os
 from time import sleep
-# from scapy.all import *
+from scapy.all import *
 
 # import argparse
 
@@ -98,15 +98,15 @@ class Node_Socket:
 
         num_packets = input("Enter the number of packets you would like to sniff\n")
         num_packets = int(num_packets)
-        # try:
-        #     if (sniff_ip == "0x1A"):
-        #         sniff(count=num_packets,filter="port 12345", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
-        #     elif (sniff_ip == "0x2A"):
-        #         sniff(count=num_packets,filter="port 12346", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
-        #     elif (sniff_ip == "0x2B"):
-        #         sniff(count=num_packets,filter="port 12347", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
-        # except(KeyboardInterrupt):
-        #     os._exit(1)
+        try:
+            if (sniff_ip == "0x1A"):
+                sniff(count=num_packets,filter="port 12345", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
+            elif (sniff_ip == "0x2A"):
+                sniff(count=num_packets,filter="port 12346", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
+            elif (sniff_ip == "0x2B"):
+                sniff(count=num_packets,filter="port 12347", iface='\\Device\\NPF_Loopback', prn=lambda x:x.show())
+        except(KeyboardInterrupt):
+            os._exit(1)
         
 
     # Receive message functions
@@ -192,7 +192,7 @@ class Node_Socket:
                 sleep(0.6)
                 print("2 Router2 (0x21)")
                 sleep(0.4)
-                print("3 Node 3 (0x2A)")
+                print("3 Node 3 (0x2B)")
             else:
                 print("Invalid Input!")
         elif (self.source_ip == "0x2A"):
@@ -212,7 +212,7 @@ class Node_Socket:
                 sleep(0.6)
                 print("2 Router2 (0x21)")
                 sleep(0.4)
-                print("3 Node 3 (0x2A)")
+                print("3 Node 3 (0x2B)")
             else:
                 print("Invalid Input!")
 
@@ -225,7 +225,7 @@ class Node_Socket:
                 sleep(0.6)
                 print("2 Router2 (0x21)")
                 sleep(0.4)
-                print("3 Node 2 (0x1A)")
+                print("3 Node 1 (0x1A)")
             elif address == 2:
                 print(f"traceroute to Node 2 (0x2A), 3 hops max")
                 sleep(0.2)
@@ -233,7 +233,7 @@ class Node_Socket:
                 sleep(0.6)
                 print("2 Router2 (0x21)")
                 sleep(0.4)
-                print("3 Node 1 (0x2A)")
+                print("3 Node 2 (0x2A)")
             else:
                 print("Invalid Input!")
 
