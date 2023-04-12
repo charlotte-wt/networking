@@ -29,7 +29,7 @@ firewall = {}
 protocol_num_array = [0,1,2,3,4,5,6,7]
 
 # arp_table_mac = {node2_ip : node2_mac, node3_ip : node3_mac}
-arp_table_mac = {}
+arp_table = {}
 router1_mac_table = {node1_mac:12345}
 
 def received_protocol(received_message):
@@ -52,7 +52,7 @@ def received_protocol(received_message):
         # Sending message to UDP server
         sock.sendto(packet.encode(), (udp_host, 12349))
     if (destination_ip == "0x1A"):
-        # if (destination_ip in arp_table_mac):
+        # if (destination_ip in arp_table):
         sock.sendto(packet.encode(), (udp_host, 12345))
         # else:
         #     # ARP Broadcasting Request if destination IP is not in ARP table
@@ -64,12 +64,15 @@ def received_protocol(received_message):
         #     for i in router1_mac_table.keys():
         #         ethernet_frame = ethernet_type + router1_mac + i + message # i is the mac address of the node
         #         print(ethernet_frame)
-        #         print("router1_mac_table[i]: ", router1_mac_table[i])
         #         sock.sendto(ethernet_frame.encode(), (udp_host, router1_mac_table[i]))
             
-        #     arp_reply = sock.recvfrom(1024)
-        #     print("arp_reply", arp_reply)
-            # sock.sendto(packet.encode(), (udp_host, 12345))
+        #     arp_reply, addr = sock.recvfrom(1024)
+        #     arp_reply = arp_reply.decode()
+        #     port_num = addr[1]
+        #     print(arp_reply)
+        #     arp_table[arp_reply[0:3]] = arp_reply[-2:]
+        #     print("arp_table", arp_table)
+        #     sock.sendto(packet.encode(), (udp_host, port_num))
 
 
 # ARP Request/Reply Function
