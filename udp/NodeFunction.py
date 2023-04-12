@@ -208,7 +208,7 @@ class Node_Socket:
                     self.ip_sniffer()
                 elif(prompt == 5):
                     self.traceroute()
-                elif(prompt == 7):
+                elif(prompt == 6):
                     print('\n[INFO]: Terminating..')
                     self.sock.close()
                     os._exit(1)
