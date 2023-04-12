@@ -169,25 +169,67 @@ class Node_Socket:
             os._exit(1)
     
     def traceroute(self):
-        address = int(input("\nWhich node would you like to ping?\n1. Node 2\n2. Node 3\n\n"))
-        if address == 1:
-            print(f"traceroute to Node 2 (0x2A), 3 hops max")
-            sleep(0.2)
-            print("\n1 Router1 (0x11)")
-            sleep(0.6)
-            print("2 Router2 (0x21)")
-            sleep(0.4)
-            print("3 Node 2 (0x2A)")
-        elif address == 2:
-            print(f"traceroute to Node 3 (0x2B), 3 hops max")
-            sleep(0.2)
-            print("\n1 Router1 (0x11)")
-            sleep(0.6)
-            print("2 Router2 (0x21)")
-            sleep(0.4)
-            print("3 Node 3 (0x2A)")
-        else:
-            print("Invalid Input!")
+        if (self.source_ip == "0x1A"):
+            address = int(input("\nWhich node would you like to ping?\n1. Node 2\n2. Node 3\n\n"))
+            if address == 1:
+                print(f"traceroute to Node 2 (0x2A), 3 hops max")
+                sleep(0.2)
+                print("\n1 Router1 (0x11)")
+                sleep(0.6)
+                print("2 Router2 (0x21)")
+                sleep(0.4)
+                print("3 Node 2 (0x2A)")
+            elif address == 2:
+                print(f"traceroute to Node 3 (0x2B), 3 hops max")
+                sleep(0.2)
+                print("\n1 Router1 (0x11)")
+                sleep(0.6)
+                print("2 Router2 (0x21)")
+                sleep(0.4)
+                print("3 Node 3 (0x2A)")
+            else:
+                print("Invalid Input!")
+        elif (self.source_ip == "0x2A"):
+            address = int(input("\nWhich node would you like to ping?\n1. Node 1\n2. Node 3\n\n"))
+            if address == 1:
+                print(f"traceroute to Node 1 (0x1A), 3 hops max")
+                sleep(0.2)
+                print("\n1 Router1 (0x11)")
+                sleep(0.6)
+                print("2 Router2 (0x21)")
+                sleep(0.4)
+                print("3 Node 1 (0x1A)")
+            elif address == 2:
+                print(f"traceroute to Node 3 (0x2B), 3 hops max")
+                sleep(0.2)
+                print("\n1 Router1 (0x11)")
+                sleep(0.6)
+                print("2 Router2 (0x21)")
+                sleep(0.4)
+                print("3 Node 3 (0x2A)")
+            else:
+                print("Invalid Input!")
+
+        elif (self.source_ip == "0x2B"):
+            address = int(input("\nWhich node would you like to ping?\n1. Node 1\n2. Node 2\n\n"))
+            if address == 1:
+                print(f"traceroute to Node 1 (0x1A), 3 hops max")
+                sleep(0.2)
+                print("\n1 Router1 (0x11)")
+                sleep(0.6)
+                print("2 Router2 (0x21)")
+                sleep(0.4)
+                print("3 Node 2 (0x1A)")
+            elif address == 2:
+                print(f"traceroute to Node 2 (0x2A), 3 hops max")
+                sleep(0.2)
+                print("\n1 Router1 (0x11)")
+                sleep(0.6)
+                print("2 Router2 (0x21)")
+                sleep(0.4)
+                print("3 Node 1 (0x2A)")
+            else:
+                print("Invalid Input!")
 
 
     # Main Thread functions
