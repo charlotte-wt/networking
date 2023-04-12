@@ -146,16 +146,16 @@ class Node_Socket:
             # log
             if (destination_ip == "0x1A"):
                 logging.basicConfig(filename="logs/node1.log", 
-                format='%(asctime)s \n %(message)s', 
-                filemode='w')
+                format='%(asctime)s \n %(message)s\n', 
+                filemode='a')
             elif(destination_ip == "0x2A"):
                 logging.basicConfig(filename="logs/node2.log", 
-                format='%(asctime)s \n %(message)s', 
-                filemode='w')
+                format='%(asctime)s \n %(message)s\n', 
+                filemode='a')
             elif(destination_ip == "0x2B"):
                 logging.basicConfig(filename="logs/node3.log", 
-                format='%(asctime)s \n %(message)s', 
-                filemode='w')
+                format='%(asctime)s \n %(message)s\n', 
+                filemode='a')
 
             logger=logging.getLogger() 
             logger.setLevel(logging.DEBUG) 
